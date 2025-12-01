@@ -9,13 +9,22 @@
 
 Saving Christmas one puzzle at a time.
 
-Welcome to my Advent of Code 2025 repository!
+Welcome to my Advent of Code 2025 repo — a winter-themed proving ground powered by Python, curiosity, and an unreasonable amount of raccoon-tier problem-solving energy.
 
-Each folder contains my daily Python solutions, notes, experiments, and festive chaos as I work through the puzzles.
+Inside these folders:
+daily puzzles, experiments, refactors, side quests, and the occasional “how did the Elves architect this?” moment.
 
-The goal?
+This is where I:
 
-Sharpen problem‑solving skills, improve Python mastery, and help the Elves recover from whatever questionable project‑management decisions they've made this year.
+•	break things
+•	fix things
+•	learn things
+•	ship things
+•	and try not to deploy more holiday incidents than the Elves already have
+
+It’s chaotic.
+It’s productive.
+It’s #NickDoesDevOps: Advent Edition.
 
 ---
 
