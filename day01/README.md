@@ -1,113 +1,6 @@
-## 🎄 Advent of Code — Day 1: Secret Entrance
+# 🎄 Advent of Code 2025 — Day 1: Secret Entrance
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
-
-This repo contains a clean Python solution to Day 1, where we simulate a circular dial and count how many times it lands on 0.
-
----
-
-## 🎅 Story Summary
-
-You arrive at a hidden entrance to the North Pole base, but the password was changed!
-The Elves left behind a sequence of rotations — each like:
-
-```bash
-L68
-R12
-L4
-```
-
-Each rotation tells you how far to turn the safe’s dial left or right.
-The dial has positions 0–99 and wraps around (99 → 0, 0 → 99).
-
-You start at 50, follow all rotations, and record how many times the dial lands on 0.
-
-That count is the real password.
-
----
-
-## 🔧 Project Structure
-
-```plaintext
-.
-├── input.txt
-├── README.md
-└── solution.py
-```
-
----
-
-## ▶️ How to Use This Solution
-
-1. Place your puzzle input in `input.txt` (one rotation per line).
-2. Run the Python script:
-
-```bash
-python solution.py
-```
-
-3.	The output will look like:
-
-```bash
-Password: 997
-```
-
-Where *997* is the number of times the dial landed on 0 across all rotations.
-
----
-
-## 🧠 How the Logic Works
-
-• Dial starts at 50
-• Each instruction is:
-	• Lx → move x steps backward (subtract, wrap)
-	• Rx → move x steps forward (add, wrap)
-• After each rotation:
-	• If dial is 0, increment the answer
-	• Use modulo arithmetic to wrap around a 0–99 circle
-
----
-
-## 🐍 Example Python Logic (concept only)
-
-```python
-pos = 50
-zeros = 0
-
-for line in lines:
-    direction = line[0]
-    steps = int(line[1:])
-
-    if direction == "L":
-        pos = (pos - steps) % 100
-    else:
-        pos = (pos + steps) % 100
-
-    if pos == 0:
-        zeros += 1
-
-print("Password:", zeros)
-```
-
----
-
-🎁 Example Visualization
-
-```bash
-Start at 50
-L30 → 20
-R70 → 90
-R10 → 0  🎉 (zero #1)
-L1  → 99
-...
-```
-
-You count each landing on 0 — that’s the puzzle’s answer.
-
----
-
-## ❄️ Festive ASCII for vibes
-
+```text
         *    ✵
       ✵  \ | /   *
     *     \|/  ✵
@@ -115,15 +8,216 @@ You count each landing on 0 — that’s the puzzle’s answer.
     *     /|\      ✵
        ✵ / | \  *
            *
+```
+
+Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+
+This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
 
 ---
+
+## 🎅 Story Summary
+
+You arrive at a hidden entrance to the North Pole base, but the password has changed!
+
+The Elves left behind a document full of rotations like:
+
+```text
+L68
+R12
+L4
+```
+
+Each instruction turns the safe’s dial:
+
+- `Lx` → rotate **left** toward lower numbers  
+- `Rx` → rotate **right** toward higher numbers  
+
+The dial has **100 positions** (`0`–`99`) and wraps around:
+
+- left from `0` → `99`  
+- right from `99` → `0`  
+
+You always begin at **50**.
+
+### 🧩 Part 1
+
+Follow all rotations from the input.  
+After **each full rotation**, check where the dial ends up.  
+
+> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
+
+### 🧩 Part 2 — Click-by-Click Mode
+
+The Elves switch to “method `0x434C49434B`”, which means:
+
+> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
+
+So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+
+---
+
+## 🔧 Project Structure
+
+```plaintext
+day01/
+├── input.txt      # Your personal puzzle input
+├── solution.py    # Python solution (part1, part2, tests)
+└── README.md      # This file
+```
+
+---
+
+## ▶️ How to Run the Solution
+
+1. Put your puzzle input into `input.txt`  
+   (one rotation per line, e.g. `L68`, `R12`, `R1000`, etc.)
+
+2. Make sure you’re in the `day01` folder:
+
+   ```bash
+   cd day01
+   ```
+
+3. Run the Python script:
+
+   ```bash
+   python3 solution.py
+   ```
+
+4. With normal (non-test) mode enabled, you’ll see:
+
+   ```text
+   Part 1: 997
+   Part 2: 5978
+   ```
+
+   Where:
+
+   - **Part 1** → count of times the dial is on `0` **after** a rotation  
+   - **Part 2** → count of times the dial hits `0` on **any click** during all rotations
+
+---
+
+## 🧠 How the Logic Works (High Level)
+
+Both parts share the same basic idea:
+
+- Start at `position = 50`
+- Parse each line:
+  - `direction = line[0]` → `'L'` or `'R'`
+  - `distance = int(line[1:])`
+- The dial is always kept in the range `0–99` using modulo:
+
+  ```python
+  position = (position + step) % 100
+  ```
+
+### Part 1
+
+- For each instruction:
+  - Move the dial once by `+distance` (right) or `-distance` (left), using modulo for wrapping.
+  - If the final `position` is `0`, increment the counter.
+
+### Part 2
+
+- For each instruction:
+  - Instead of one big jump, simulate **`distance` single-click moves**:
+    - Right → `position = (position + 1) % 100`
+    - Left → `position = (position - 1) % 100`
+  - After each click, if `position == 0`, increment the counter.
+
+This matches the problem’s “count every click that lands on zero” requirement and correctly handles big distances like `R1000`.
+
+---
+
+## 🧪 Running the Optional Test Suite
+
+`solution.py` includes a small, built-in test suite that checks:
+
+- The official example from the problem statement (Part 1 & Part 2)
+- Some custom scenarios that stress wrapping and multiple zero crossings
+
+The tests are **off by default** so normal runs just solve the puzzle.
+
+### 🔄 Turn Tests On
+
+1. Open `solution.py`
+2. Scroll to the bottom and find:
+
+   ```python
+   if __name__ == "__main__":
+       RUN_TESTS = False
+   ```
+
+3. Switch it to:
+
+   ```python
+   if __name__ == "__main__":
+       RUN_TESTS = True
+   ```
+
+4. Run:
+
+   ```bash
+   python3 solution.py
+   ```
+
+You’ll see something like:
+
+```text
+Running tests...
+All tests passed!
+```
+
+If any `assert` fails, Python will raise an error so you can investigate.
+
+### 🔁 Switch Back to Puzzle Mode
+
+Once you’re done testing, set:
+
+```python
+RUN_TESTS = False
+```
+
+again so `solution.py` runs against `input.txt` and prints your actual answers.
+
+---
+
+## 🎁 Example Walkthrough (Tiny Sample)
+
+Imagine this tiny input:
+
+```text
+R50
+R50
+```
+
+Start at `50`.
+
+- `R50`:
+  - Part 1: end on `0` → counts as 1 hit
+  - Part 2: during the 50 clicks, you land on `0` exactly once → 1 hit
+- `R50` again:
+  - Part 1: end on `50` → 0 additional
+  - Part 2: another 1 time hitting `0` during the path
+
+So for that input:
+
+- Part 1: `1`  
+- Part 2: `2`
+
+This is the kind of scenario covered by the tests in `solution.py`.
+
+---
+
 
 ## 🦝 Built by NickDoesDevOps
 
 Created with ☕, curiosity, and just enough chaos by:
 
-[![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
-[![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
+- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
+- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
+- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
 
 🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
