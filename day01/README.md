@@ -9,9 +9,9 @@
   >
 </p>
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+Decorating the North Pole shouldn’t be this hard… but the Elves discovered project management, immediately misused it, and now you’re cracking open a suspiciously over-engineered safe to save Christmas.
 
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+Inside this folder: the Python solutions for Part 1 and Part 2, and a tiny test suite to help current-you and future-you verify that the dial logic hasn’t melted down.
 
 ---
 
