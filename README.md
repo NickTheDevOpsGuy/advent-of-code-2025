@@ -3,11 +3,14 @@
 Saving Christmas one puzzle at a time.
 
 ```text
-        *         .
-       .  .     *     .
-   *        🎄  .        *
-      .   .     .    *
-  ✵  Advent of Code ✵
+            *         .
+        .       .         *
+     *        \ | /        .
+          .    \|/    *
+     ✵        --*--         ✵
+          *    /|\    .
+     .        / | \        *
+           Advent of Code
 ```
 
 Welcome to my Advent of Code 2025 repository!  
