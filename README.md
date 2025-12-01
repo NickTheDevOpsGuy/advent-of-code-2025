@@ -1,18 +1,8 @@
-# 🎄 Advent of Code 2025
+<p align="center">
+  <strong>✨❄️🎄 Advent of Code 2025 🎄❄️✨</strong>
+</p>
 
 Saving Christmas one puzzle at a time.
-
-<div align="center">
-<pre>
-
-        *       .       *       .       *
-    .        *      🎄      *        .
-        *       .  Advent of Code  .       *
-    .        *               *        .
-        *       .       *       .       *
-
-</pre>
-</div>
 
 Welcome to my Advent of Code 2025 repository!  
 Each folder contains my daily Python solutions, notes, experiments, and festive chaos as I work through the puzzles.
