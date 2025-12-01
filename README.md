@@ -25,21 +25,38 @@ Sharpen problem‑solving skills, improve Python mastery, and help the Elves rec
 ```plaintext
 .
 ├── .gitignore
+├── assets
+│   └── adventOfCode2025.png
 ├── day01
 │   ├── input.txt
 │   ├── README.md
 │   └── solution.py
 ├── day02
+│   ├── input.txt
+│   ├── README.md
+│   └── solution.py
 ├── day03
+│   ├── input.txt
+│   ├── README.md
+│   └── solution.py
 ├── day04
+│   └── README.md
 ├── day05
+│   └── README.md
 ├── day06
+│   └── README.md
 ├── day07
+│   └── README.md
 ├── day08
+│   └── README.md
 ├── day09
+│   └── README.md
 ├── day10
+│   └── README.md
 ├── day11
+│   └── README.md
 ├── day12
+│   └── README.md
 ├── LICENSE
 └── README.md
 ```
