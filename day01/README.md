@@ -37,6 +37,25 @@ That count is the real password.
 
 ---
 
+## ▶️ How to Use This Solution
+
+1. Place your puzzle input in `input.txt` (one rotation per line).
+2. Run the Python script:
+
+```bash
+python solution.py
+```
+
+3.	The output will look like:
+
+```bash
+Password: 997
+```
+
+Where *997* is the number of times the dial landed on 0 across all rotations.
+
+---
+
 ## 🧠 How the Logic Works
 
 • Dial starts at 50
@@ -99,3 +118,12 @@ You count each landing on 0 — that’s the puzzle’s answer.
 
 ---
 
+## 🦝 Built by NickDoesDevOps
+
+Created with ☕, curiosity, and just enough chaos by:
+
+[![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
+[![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
+
+🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
