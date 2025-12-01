@@ -1,6 +1,6 @@
 # 🎄 Advent of Code 2025 — Day 1: Secret Entrance
 
-<p align="center">
+<p align="left">
   <img 
     src="../assets/adventOfCode2025.png"
     width="800"

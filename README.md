@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
   <img 
     src="./assets/adventOfCode2025.png"
     width="800"
