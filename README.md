@@ -3,16 +3,15 @@
 Saving Christmas one puzzle at a time.
 
 <div align="center">
-
-✨❄️🎄 <strong>Advent of Code 2025</strong> 🎄❄️✨  
 <pre>
-          *      .        *        .      *
-      .        *      🎄       *        .
-    *     .        Advent of Code       .     *
-      .        *               *        .
-          *      .        *        .      *
-</pre>
 
+        *       .       *       .       *
+    .        *      🎄      *        .
+        *       .  Advent of Code  .       *
+    .        *               *        .
+        *       .       *       .       *
+
+</pre>
 </div>
 
 Welcome to my Advent of Code 2025 repository!  
