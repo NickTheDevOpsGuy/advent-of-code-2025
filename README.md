@@ -16,11 +16,11 @@ daily puzzles, experiments, refactors, side quests, and the occasional “how di
 
 This is where I:
 
-•	break things
-•	fix things
-•	learn things
-•	ship things
-•	and try not to deploy more holiday incidents than the Elves already have
+- break things
+- fix things
+- learn things
+- ship things
+- and try not to deploy more holiday incidents than the Elves already have
 
 It’s chaotic.
 It’s productive.
