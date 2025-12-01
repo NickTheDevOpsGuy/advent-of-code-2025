@@ -1,5 +1,10 @@
 <p align="center">
-  <strong>✨❄️🎄 Advent of Code 2025 🎄❄️✨</strong>
+  <img 
+    src="./assets/adventOfCode2025.png"
+    width="800"
+    alt="NES-style snowy pixel art banner with raccoon coder"
+    title="NES Snowy Pixel Art Banner"
+  >
 </p>
 
 Saving Christmas one puzzle at a time.

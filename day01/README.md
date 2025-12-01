@@ -1,14 +1,13 @@
 # 🎄 Advent of Code 2025 — Day 1: Secret Entrance
 
-```text
-        *    ✵
-      ✵  \ | /   *
-    *     \|/  ✵
-  ✵    * --🎄--   *
-    *     /|\      ✵
-       ✵ / | \  *
-           *
-```
+<p align="center">
+  <img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="NES-style snowy pixel art banner with raccoon coder"
+    title="NES Snowy Pixel Art Banner"
+  >
+</p>
 
 Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
 
