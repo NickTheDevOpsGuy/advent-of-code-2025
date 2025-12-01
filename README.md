@@ -9,10 +9,12 @@
 
 Saving Christmas one puzzle at a time.
 
-Welcome to my Advent of Code 2025 repository!  
+Welcome to my Advent of Code 2025 repository!
+
 Each folder contains my daily Python solutions, notes, experiments, and festive chaos as I work through the puzzles.
 
-The goal?  
+The goal?
+
 Sharpen problem‑solving skills, improve Python mastery, and help the Elves recover from whatever questionable project‑management decisions they've made this year.
 
 ---
