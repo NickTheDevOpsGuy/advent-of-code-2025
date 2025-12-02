@@ -81,7 +81,6 @@ def test_part2():
 
 #[test]
 def test_part2_exact_100():
-    
     lines = [
         "R100",
         "L100",

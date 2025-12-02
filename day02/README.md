@@ -1,18 +1,19 @@
 # 🎄 Advent of Code 2025 — Day 2: Secret Entrance
 
-```text
-        *    ✵
-      ✵  \ | /   *
-    *     \|/  ✵
-  ✵    * --🎄--   *
-    *     /|\      ✵
-       ✵ / | \  *
-           *
-```
+<p align="left">
+  <img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="NES-style snowy pixel art banner with raccoon coder"
+    title="NES Snowy Pixel Art Banner"
+  >
+</p>
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+The decorations are half-finished, the deadlines are actively smoking, and—because fate has a sense of humor—the Elves have discovered project management.
+They’ve made a Gantt chart, argued about it for three hours, and now you have to open a mysterious safe so the North Pole doesn’t collapse into whimsical anarchy.
+Typical Tuesday.
 
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+Inside this folder lives a clean Python solution for both Part 1 and Part 2, plus a tiny test suite so Future-You doesn’t have to guess whether the code still works after “refactoring.”
 
 ---
 
@@ -20,18 +21,24 @@ This folder contains a clean **Python solution for both Part 1 and Part 2**, plu
 
 ### 🧩 Part 1
 
-Follow all rotations from the input.  
-After **each full rotation**, check where the dial ends up.  
+You’ve got a dial from 0–99. The instructions tell you how far to rotate it.
+Every time you complete a rotation, you check where it landed.
 
-> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
+If the dial ends exactly on 0, congrats — that’s one point for the “prevent Christmas meltdown” scoreboard.
+
+> Simple concept… until the Elves remember they’re Elves and ruin geometry.
 
 ### 🧩 Part 2 — Click-by-Click Mode
 
-The Elves switch to “method `0x434C49434B`”, which means:
+The Elves activate method 0x434C49434B (“CLICK”), which is basically:
 
-> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
+> “What if we made this needlessly complicated… on purpose?”
 
-So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+Now you count every single click that passes through 0.
+Doesn’t matter if you end there. Doesn’t matter if you were on your way to 87.
+If you pass 0? Ding. Count it.
+
+This makes the dial behave like a tiny chaotic Ferris wheel run by interns.
 
 ---
 
