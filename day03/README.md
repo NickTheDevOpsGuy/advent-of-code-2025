@@ -11,8 +11,8 @@
 
 Today's challenge answers the age-old holiday question:
 
-> "What if the **entire underground North Pole complex** depended on\
-> escalators powered by **loose experimental batteries**\
+> "What if the **entire underground North Pole complex** depended on
+> escalators powered by **loose experimental batteries**
 > sorted by an elf who definitely failed orientation?"
 
 Welcome to Day 3.
@@ -27,15 +27,15 @@ when Future-You decides to "refactor" at 2:13am.
 
 ### 🧩 **Part 1 --- Pick Two Batteries, Don't Die**
 
-You walk into the lobby.\
-All the elevators are dead.\
-The escalator is also dead.\
+You walk into the lobby.
+All the elevators are dead.
+The escalator is also dead.
 The Elf at the console gives you a look that says:
 
 > "I have absolutely no idea how any of this works, but can YOU fix it?"
 
-You get a table of digits.\
-Each row is a "battery bank."\
+You get a table of digits.
+Each row is a "battery bank."
 You must choose **two digits** from each row --- in the **same order**
 as they appear --- to create the **largest possible two-digit joltage**
 like some kind of festive number-heist.
@@ -46,8 +46,8 @@ Example:
     Pick: 98
     Why:  Because you have taste
 
-You do this across every row and add them up.\
-The escalator coughs but does not move.\
+You do this across every row and add them up.
+The escalator coughs but does not move.
 Standard North Pole engineering.
 
 ------------------------------------------------------------------------
@@ -58,17 +58,17 @@ The Elf slaps the **"Joltage Limit Safety Override"** button 14 times.
 
 Suddenly you're told:
 
-> "Actually you need **twelve** digits.\
-> Yes, from each row.\
-> Yes, in order.\
-> Yes, the biggest number you can possibly make.\
+> "Actually you need **twelve** digits.
+> Yes, from each row.
+> Yes, in order.
+> Yes, the biggest number you can possibly make.
 > Why? ...Look, I don't make the rules."
 
 Now you're essentially:
 
--   constructing a 12-digit mega-battery\
--   one digit at a time\
--   using a sliding "choose-the-best-digit-you-can-reach" strategy\
+-   constructing a 12-digit mega-battery
+-   one digit at a time
+-   using a sliding "choose-the-best-digit-you-can-reach" strategy
 -   while a raccoon inside your brain screams about window boundaries
 
 It's delightfully awful.
@@ -103,10 +103,10 @@ This prints something like:
 
 Because Day 3 involves:
 
--   greedy logic\
--   window bounds\
--   off-by-one nightmares\
--   raccoon-induced hallucinations\
+-   greedy logic
+-   window bounds
+-   off-by-one nightmares
+-   raccoon-induced hallucinations
 -   the number 12
 
 ...we added a test suite so you can sanity-check behavior after
@@ -141,9 +141,9 @@ If all goes well:
 
 If a test fails:
 
--   You get a stack trace\
--   You get sadness\
--   But also clarity\
+-   You get a stack trace
+-   You get sadness
+-   But also clarity
 -   And maybe snacks
 
 Switch back to puzzle mode afterward:
@@ -156,15 +156,15 @@ RUN_TESTS = False
 
 ## 🧪 What Our Tests Cover
 
--   Official example results from the problem\
--   Increasing sequences (should take the last 12)\
--   Decreasing sequences (should take the first 12)\
--   Identical digits (chaos but predictable chaos)\
--   Exactly 12 digits\
--   13 digits (the brutal edge case)\
+-   Official example results from the problem
+-   Increasing sequences (should take the last 12)
+-   Decreasing sequences (should take the first 12)
+-   Identical digits (chaos but predictable chaos)
+-   Exactly 12 digits
+-   13 digits (the brutal edge case)
 -   Alternating high-low patterns (stress test)
 
-Basically:\
+Basically:
 **If you've made a mistake, a test somewhere will bully you about it.**
 
 ------------------------------------------------------------------------
@@ -181,10 +181,10 @@ Your brain:
 
 Greedy logic:
 
-> "Pick the strongest digit you can reach for slot 1,\
-> then the next,\
-> then the next,\
-> until you've crafted a glorious 12-digit escalator battery\
+> "Pick the strongest digit you can reach for slot 1,
+> then the next,
+> then the next,
+> until you've crafted a glorious 12-digit escalator battery
 > that would absolutely void its warranty."
 
 Result:
@@ -199,12 +199,12 @@ It's weirdly beautiful.
 
 Made with:
 
--   60% caffeine\
--   30% raccoon energy\
+-   60% caffeine
+-   30% raccoon energy
 -   10% questionable Christmas spirit
 
 **Nicholas Clark --- #NickDoesDevOps**
 
-GitHub: https://github.com/NickTheDevOpsGuy\
-LinkedIn: https://www.linkedin.com/in/nicholas-a-clark/\
+GitHub: https://github.com/NickTheDevOpsGuy
+LinkedIn: https://www.linkedin.com/in/nicholas-a-clark/
 Email: nicholas.a.clark@outlook.com
