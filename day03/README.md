@@ -1,119 +1,212 @@
-# 🎄 Advent of Code 2025 — Day 3: Secret Entrance
+# 🎄 Advent of Code 2025 --- Day 3: Lobby Logic & Escalator Shenanigans
 
-```text
-        *    ✵
-      ✵  \ | /   *
-    *     \|/  ✵
-  ✵    * --🎄--   *
-    *     /|\      ✵
-       ✵ / | \  *
-           *
+```{=html}
+<p align="left">
 ```
+`<img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="NES-style snowy pixel art banner with raccoon coder"
+  >`{=html}
+```{=html}
+</p>
+```
+Today's challenge answers the age-old holiday question:
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+> "What if the **entire underground North Pole complex** depended on\
+> escalators powered by **loose experimental batteries**\
+> sorted by an elf who definitely failed orientation?"
 
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+Welcome to Day 3.
 
----
+Inside this folder you'll find a clean Python solution for Part 1 and
+Part 2 *and* a mini-test suite to keep everything from catching fire
+when Future-You decides to "refactor" at 2:13am.
+
+------------------------------------------------------------------------
 
 ## 🎅 Story Summary
 
-### 🧩 Part 1
+### 🧩 **Part 1 --- Pick Two Batteries, Don't Die**
 
-Follow all rotations from the input.  
-After **each full rotation**, check where the dial ends up.  
+You walk into the lobby.\
+All the elevators are dead.\
+The escalator is also dead.\
+The Elf at the console gives you a look that says:
 
-> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
+> "I have absolutely no idea how any of this works, but can YOU fix it?"
 
-### 🧩 Part 2 — Click-by-Click Mode
+You get a table of digits.\
+Each row is a "battery bank."\
+You must choose **two digits** from each row --- in the **same order**
+as they appear --- to create the **largest possible two-digit joltage**
+like some kind of festive number-heist.
 
-The Elves switch to “method `0x434C49434B`”, which means:
+Example:
 
-> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
+    Row:  987654321111111
+    Pick: 98
+    Why:  Because you have taste
 
-So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+You do this across every row and add them up.\
+The escalator coughs but does not move.\
+Standard North Pole engineering.
 
----
+------------------------------------------------------------------------
+
+### 🧩 **Part 2 --- Now Make It Twelve Digits, Because Elves**
+
+The Elf slaps the **"Joltage Limit Safety Override"** button 14 times.
+
+Suddenly you're told:
+
+> "Actually you need **twelve** digits.\
+> Yes, from each row.\
+> Yes, in order.\
+> Yes, the biggest number you can possibly make.\
+> Why? ...Look, I don't make the rules."
+
+Now you're essentially:
+
+-   constructing a 12-digit mega-battery\
+-   one digit at a time\
+-   using a sliding "choose-the-best-digit-you-can-reach" strategy\
+-   while a raccoon inside your brain screams about window boundaries
+
+It's delightfully awful.
+
+------------------------------------------------------------------------
 
 ## 🔧 Project Structure
 
-```plaintext
-day02/
+``` plaintext
+day03/
 ├── input.txt      # Your personal puzzle input
-├── solution.py    # Python solution (part1, part2, tests)
-└── README.md      # This file
+├── solution.py    # Python solutions (part1, part2, tests)
+└── README.md      # This majestic chaos document
 ```
 
----
+------------------------------------------------------------------------
 
-## ▶️ How to Run the Solution
+## ▶️ Running the Solution
 
+``` bash
+python3 solution.py
+```
 
----
+This prints something like:
+
+    Part 1: <number that hopefully isn’t zero>
+    Part 2: <ungodly large number that makes your CPU sweat>
+
+------------------------------------------------------------------------
 
 ## 🧪 Running the Optional Test Suite
 
-`solution.py` includes a small, built-in test suite that checks:
+Because Day 3 involves:
 
-- The official example from the problem statement (Part 1 & Part 2)
-- Some custom scenarios that stress wrapping and multiple zero crossings
+-   greedy logic\
+-   window bounds\
+-   off-by-one nightmares\
+-   raccoon-induced hallucinations\
+-   the number 12
 
-The tests are **off by default** so normal runs just solve the puzzle.
+...we added a test suite so you can sanity-check behavior after
+"cleanups" that really aren't clean.
 
-### 🔄 Turn Tests On
+Tests are OFF by default.
 
-1. Open `solution.py`
-2. Scroll to the bottom and find:
+### 🔄 Turn Them On
 
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = False
-   ```
+Find this at the bottom of `solution.py`:
 
-3. Switch it to:
-
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = True
-   ```
-
-4. Run:
-
-   ```bash
-   python3 solution.py
-   ```
-
-You’ll see something like:
-
-```text
-Running tests...
-All tests passed!
-```
-
-If any `assert` fails, Python will raise an error so you can investigate.
-
-### 🔁 Switch Back to Puzzle Mode
-
-Once you’re done testing, set:
-
-```python
+``` python
 RUN_TESTS = False
 ```
 
-again so `solution.py` runs against `input.txt` and prints your actual answers.
+Flip it:
 
----
+``` python
+RUN_TESTS = True
+```
 
-## 🎁 Example Walkthrough (Tiny Sample)
+Run:
 
----
+``` bash
+python3 solution.py
+```
+
+If all goes well:
+
+    Running tests...
+    All tests passed!
+
+If a test fails:
+
+-   You get a stack trace\
+-   You get sadness\
+-   But also clarity\
+-   And maybe snacks
+
+Switch back to puzzle mode afterward:
+
+``` python
+RUN_TESTS = False
+```
+
+------------------------------------------------------------------------
+
+## 🧪 What Our Tests Cover
+
+-   Official example results from the problem\
+-   Increasing sequences (should take the last 12)\
+-   Decreasing sequences (should take the first 12)\
+-   Identical digits (chaos but predictable chaos)\
+-   Exactly 12 digits\
+-   13 digits (the brutal edge case)\
+-   Alternating high-low patterns (stress test)
+
+Basically:\
+**If you've made a mistake, a test somewhere will bully you about it.**
+
+------------------------------------------------------------------------
+
+## 🎁 Tiny Example Walkthrough
+
+Row:
+
+    234234234234278
+
+Your brain:
+
+> "Ahhhhhgh I have to choose TWELVE digits?!"
+
+Greedy logic:
+
+> "Pick the strongest digit you can reach for slot 1,\
+> then the next,\
+> then the next,\
+> until you've crafted a glorious 12-digit escalator battery\
+> that would absolutely void its warranty."
+
+Result:
+
+    434234234278
+
+It's weirdly beautiful.
+
+------------------------------------------------------------------------
 
 ## 🦝 Built by NickDoesDevOps
 
-Created with ☕, curiosity, and just enough chaos by:
+Made with:
 
-- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
-- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
+-   60% caffeine\
+-   30% raccoon energy\
+-   10% questionable Christmas spirit
 
-🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
+**Nicholas Clark --- #NickDoesDevOps**
+
+GitHub: https://github.com/NickTheDevOpsGuy\
+LinkedIn: https://www.linkedin.com/in/nicholas-a-clark/\
+Email: nicholas.a.clark@outlook.com

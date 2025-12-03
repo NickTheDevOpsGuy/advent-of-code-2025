@@ -1,3 +1,7 @@
+# -------------------------
+#   Read in the file
+# -------------------------
+
 def read_input():
     with open("input.txt") as f:
         lines = f.read().strip().splitlines()
@@ -46,6 +50,10 @@ def is_repeating_pattern(number):
     
     return False
 
+# -------------------------
+#   Part 1 Logic
+# -------------------------
+
 def part1(lines):
     line = lines[0].strip().rstrip(',')
     raw_ranges = line.split(',')
@@ -59,6 +67,10 @@ def part1(lines):
     
     invalid_ids = generate_double_ids_in_ranges(ranges)
     return sum(invalid_ids)
+
+# -------------------------
+#   Part 2 Logic
+# -------------------------
 
 def part2(lines):
     line = lines[0].strip().rstrip(',')
@@ -79,8 +91,9 @@ def part2(lines):
     
     return sum(invalid_ids)  # ← sum them up
 
+#
 # -------------------------
-#   Test Suite (Optional)
+#   Part 1 Test Suite (Optional)
 # -------------------------
 
 def test_small_range():
@@ -113,6 +126,11 @@ def test_example():
     assert part1(lines) == 1227775554
     result = part1(lines)
 
+#
+# -------------------------
+#   Part 2 Test Suite (Optional)
+# -------------------------
+
 def test_part2_example():
     lines = ["11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"]
     assert part2(lines) == 4174379265
@@ -129,6 +147,11 @@ def test_part2_small():
     lines = ["11-22"]
     assert part2(lines) == 33  # Still just 11 + 22
 
+#
+# -------------------------
+#   Run the Tests
+# -------------------------
+
 def run_tests():
     print("Running tests...")
     
@@ -140,6 +163,11 @@ def run_tests():
     test_example()
 
     print("All tests passed!")
+
+#
+# -------------------------
+#   Main Code Section
+# -------------------------
 
 if __name__ == "__main__":
     RUN_TESTS = False

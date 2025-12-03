@@ -1,7 +1,15 @@
+# -------------------------
+#   Read in the file
+# -------------------------
+
 def read_input():
     with open("input.txt") as f:
         lines = f.read().strip().splitlines()
     return lines
+
+# -------------------------
+#   Part 1 Logic
+# -------------------------
 
 def part1(lines):
     position = 50      # dial starts at 50
@@ -20,6 +28,10 @@ def part1(lines):
             zero_hits += 1
 
     return zero_hits
+
+# -------------------------
+#   Part 2 Logic
+# -------------------------
 
 def part2(lines):
     position = 50      # dial starts at 50
@@ -40,11 +52,12 @@ def part2(lines):
 
     return zero_hits
 
+#
 # -------------------------
-#   Test Suite (Optional)
+#   Part 1 Test Suite (Optional)
 # -------------------------
 
-#[test]
+
 def test_part1():
     # Example input from the problem statement
     lines = [
@@ -60,9 +73,12 @@ def test_part1():
         "L82",
     ]
     assert part1(lines) == 3   # expected result is 3
-    print(part2(lines))
 
-#[test]
+#
+# -------------------------
+#   Part 12Test Suite (Optional)
+# -------------------------
+
 def test_part2():
     lines = [
         "L68",
@@ -77,9 +93,7 @@ def test_part2():
         "L82",
     ]
     assert part2(lines) == 6   # expected result is 6
-    print(part2(lines))
 
-#[test]
 def test_part2_exact_100():
     lines = [
         "R100",
@@ -88,9 +102,7 @@ def test_part2_exact_100():
         "R200",
     ]
     assert part2(lines) == 5 # expected result is 5
-    print(part2(lines))
 
-#[test]
 def test_part2_multiple_crossings():
     lines = [
         "R250",
@@ -98,7 +110,6 @@ def test_part2_multiple_crossings():
     ]
     assert part2(lines) == 8 # expected result is 8
 
-#[test]
 def test_part2_landing_on_zero():
         lines = [
             "L50",
@@ -106,9 +117,7 @@ def test_part2_landing_on_zero():
             "L200",
         ]
         assert part2(lines) == 4 # expected result is 4
-        print(part2(lines))
 
-#[test]
 def test_part2_zero_to_zero():
         lines = [
             "L50",
@@ -117,7 +126,11 @@ def test_part2_zero_to_zero():
             "L100",
         ]
         assert part2(lines) == 4 # expected result is 4
-        print(part2(lines))
+
+#
+# -------------------------
+#   Run the Tests
+# -------------------------
 
 def run_tests():
     print("Running tests...")
@@ -130,6 +143,11 @@ def run_tests():
     test_part2_zero_to_zero()
 
     print("All tests passed!")
+
+#
+# -------------------------
+#   Main Code Section
+# -------------------------
 
 if __name__ == "__main__":
     RUN_TESTS = False
