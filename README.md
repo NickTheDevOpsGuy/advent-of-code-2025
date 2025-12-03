@@ -97,8 +97,8 @@ Each `dayXX` folder includes:
 | Day | ⭐ Part 1 | ⭐ Part 2 | Notes |
 |-----|----------|----------|--------|
 | [01](day01) | 🎄 Done!  | 🎄 Done!  | Opened the secret entrance |
-| [02](day02) | 🎁 Awaiting | 🎁 Awaiting | |
-| [03](day03) | 🎁 Awaiting | 🎁 Awaiting | |
+| [02](day02) | 🎄 Done!  | 🎄 Done!  | Opened the secret entrance |
+| [03](day03) | 🎄 Done!  | 🎄 Done!  | Opened the secret entrance |
 | [04](day04) | 🎁 Awaiting | 🎁 Awaiting | |
 | [05](day05) | 🎁 Awaiting | 🎁 Awaiting | |
 | [06](day06) | 🎁 Awaiting | 🎁 Awaiting | |
