@@ -197,14 +197,10 @@ It's weirdly beautiful.
 
 ## 🦝 Built by NickDoesDevOps
 
-Made with:
+Created with ☕, curiosity, and just enough chaos by:
 
--   60% caffeine
--   30% raccoon energy
--   10% questionable Christmas spirit
+- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
+- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
+- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
 
-**Nicholas Clark --- #NickDoesDevOps**
-
-GitHub: https://github.com/NickTheDevOpsGuy
-LinkedIn: https://www.linkedin.com/in/nicholas-a-clark/
-Email: nicholas.a.clark@outlook.com
+🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
