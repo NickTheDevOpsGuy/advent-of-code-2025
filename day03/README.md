@@ -1,16 +1,14 @@
-# 🎄 Advent of Code 2025 --- Day 3: Lobby Logic & Escalator Shenanigans
+# 🎄 Advent of Code 2025 — Day 1: Secret Entrance
 
-```{=html}
 <p align="left">
-```
-`<img 
+  <img 
     src="../assets/adventOfCode2025.png"
     width="800"
     alt="NES-style snowy pixel art banner with raccoon coder"
-  >`{=html}
-```{=html}
+    title="NES Snowy Pixel Art Banner"
+  >
 </p>
-```
+
 Today's challenge answers the age-old holiday question:
 
 > "What if the **entire underground North Pole complex** depended on\
