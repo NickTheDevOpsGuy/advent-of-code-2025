@@ -1,119 +1,194 @@
-# 🎄 Advent of Code 2025 — Day 4: Secret Entrance
+# 🎄 Advent of Code 2025 — Day 4: Printing Department (FULL RACCOON MODE)
 
-```text
-        *    ✵
-      ✵  \ | /   *
-    *     \|/  ✵
-  ✵    * --🎄--   *
-    *     /|\      ✵
-       ✵ / | \  *
-           *
-```
+<p align="left">
+  <img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="Raccoon aggressively operating a forklift with zero qualifications"
+    title="Raccoon OSHA Incident #47"
+  >
+</p>
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+Welcome to Day 4, where forklifts are emotionally fragile,
+paper rolls are socially overwhelmed,
+and **you** are now the designated raccoon responsible for “optimizing operations”
+(translation: causing polite forklift chaos).
 
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+Today’s puzzle asks the key scientific question:
+
+> **“How many paper tubes can a raccoon remove before the universe collapses?”**
+
+Let’s get into it.
 
 ---
 
-## 🎅 Story Summary
+## 🧩 Part 1 — “Count the Lonely Paper Burritos”
 
-### 🧩 Part 1
+You’re given a giant grid full of paper rolls (`@`),
+arranged like a raccoon tried to assemble IKEA furniture without the manual.
 
-Follow all rotations from the input.  
-After **each full rotation**, check where the dial ends up.  
+A roll is **accessible** if it has:
 
-> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
+🦝 **Fewer than four neighbors**  
+(because forklifts don’t like crowds—forklifts are introverts)
 
-### 🧩 Part 2 — Click-by-Click Mode
+To solve Part 1:
 
-The Elves switch to “method `0x434C49434B`”, which means:
+- Look at every roll  
+- Count its 8 possible neighbors  
+- If it has **0–3 friends**, a forklift can snatch it  
+- If it has **4+**, it is too popular and therefore dead to us
 
-> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
+You tally all the socially awkward rolls.
+That’s Part 1.
 
-So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+Congratulations, you are now a Certified Raccoon Census Analyst.
+
+---
+
+## 🧩 Part 2 — “Forklift Mayhem Simulator 2025”
+
+Now unleash the madness.
+
+Once a roll is accessible…
+
+👉 The forklift removes it.  
+👉 Removing rolls makes NEW rolls accessible.  
+👉 Those rolls also get removed.  
+👉 The cycle continues until you’re left with emotional devastation.
+
+This is basically:
+
+- Minesweeper  
+- + Jenga  
+- + a raccoon driving heavy machinery  
+- – any hope of structural stability
+
+The final answer is:
+
+**How many rolls vanish in this cascading forklift purge?**
+
+In the example, a dramatic **43 rolls** get wiped out  
+because the forklifts went full raccoon mode:
+no logic, just vibes and removal.
 
 ---
 
 ## 🔧 Project Structure
 
-```plaintext
-day02/
-├── input.txt      # Your personal puzzle input
-├── solution.py    # Python solution (part1, part2, tests)
-└── README.md      # This file
+```
+day04/
+├── input.txt
+├── solution.py
+└── README.md
 ```
 
----
-
-## ▶️ How to Run the Solution
-
+This README is the chaotic one.  
+Cherish it.
 
 ---
 
-## 🧪 Running the Optional Test Suite
+## ▶️ Running the Solution
 
-`solution.py` includes a small, built-in test suite that checks:
+```
+python3 solution.py
+```
 
-- The official example from the problem statement (Part 1 & Part 2)
-- Some custom scenarios that stress wrapping and multiple zero crossings
+Output looks like:
 
-The tests are **off by default** so normal runs just solve the puzzle.
+```
+Part 1: 1370
+Part 2: <a number that proves forklifts are too powerful>
+```
 
-### 🔄 Turn Tests On
+If Part 2 prints **0**,  
+a raccoon has almost certainly edited your code without permission.
 
-1. Open `solution.py`
-2. Scroll to the bottom and find:
+---
 
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = False
-   ```
+## 🧪 Test Suite
 
-3. Switch it to:
+Day 4 involves:
 
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = True
-   ```
+- adjacency math  
+- recursion by removal  
+- infinite-loop bait  
+- forklift emotional instability  
 
-4. Run:
+So we wrote tests.  
+These tests will **scream at you** if you break anything.
 
-   ```bash
-   python3 solution.py
-   ```
+To run them:
 
-You’ll see something like:
+Edit:
 
-```text
+```
+RUN_TESTS = False
+```
+
+to
+
+```
+RUN_TESTS = True
+```
+
+Run:
+
+```
+python3 solution.py
+```
+
+You want to see:
+
+```
 Running tests...
 All tests passed!
 ```
 
-If any `assert` fails, Python will raise an error so you can investigate.
-
-### 🔁 Switch Back to Puzzle Mode
-
-Once you’re done testing, set:
-
-```python
-RUN_TESTS = False
-```
-
-again so `solution.py` runs against `input.txt` and prints your actual answers.
+If you see an error…  
+just imagine a raccoon staring at you in disappointment.
 
 ---
 
-## 🎁 Example Walkthrough (Tiny Sample)
+## 🎁 Tiny Example (with Raccoon Commentary)
+
+Initial:
+
+```
+..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+...
+```
+
+Raccoon:
+
+> “I will remove these 13.  
+> And these 12.  
+> And these 7.  
+> And these 5.  
+> Also 2.  
+> Also 1.  
+> Another 1.  
+> Again.  
+> Still bored.  
+> One more.  
+> Okay, done.”  
+
+Total removed: **43**.
+
+This is what peak forklift performance looks like.
 
 ---
 
 ## 🦝 Built by NickDoesDevOps
 
-Created with ☕, curiosity, and just enough chaos by:
+Powered by:
 
-- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
-- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
+- caffeine  
+- raccoon chaos  
+- Python  
+- questionable decision-making  
+- forklifts that should NOT be trusted  
 
-🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
+**#NickDoesDevOps • #LearningInPublic • #BuiltInPublic**

@@ -58,6 +58,10 @@ def max_joltage12_for_row(jolts):
     big_string = "".join(result)
     return int(big_string)
 
+# -------------------------
+#   Part 1 Logic
+# -------------------------
+
 def part1(lines):
     total = 0
     
@@ -201,7 +205,7 @@ def run_tests():
 # -------------------------
 
 if __name__ == "__main__":
-    RUN_TESTS = True
+    RUN_TESTS = False
 
     if RUN_TESTS:
         run_tests()

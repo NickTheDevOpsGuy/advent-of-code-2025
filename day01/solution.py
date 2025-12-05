@@ -76,7 +76,7 @@ def test_part1():
 
 #
 # -------------------------
-#   Part 12Test Suite (Optional)
+#   Part 2 Test Suite (Optional)
 # -------------------------
 
 def test_part2():
