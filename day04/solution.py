@@ -167,12 +167,6 @@ def test_full_example_matches_expected():
     ]
     assert part1(grid) == 13
 
-
-#
-# -------------------------
-#   Part 2 Test Suite (Optional)
-# -------------------------
-
 # -------------------------
 #   Part 2 Test Suite (Optional)
 # -------------------------
