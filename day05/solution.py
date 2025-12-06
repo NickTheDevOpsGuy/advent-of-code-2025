@@ -1,356 +1,230 @@
-# -------------------------
-#   Read in the file
-# -------------------------
+# ----------------------------------------------------
+#   Read Input
+# ----------------------------------------------------
 
-def read_input():
-    """
-    Reads the puzzle input from input.txt and returns a list of lines.
-    """
-    with open("input.txt") as f:
-        lines = f.read().strip().splitlines()
-    return lines
+def read_input(path="input.txt"):
+    with open(path) as f:
+        return [line.rstrip("\n") for line in f]
 
 
-# -------------------------
+# ----------------------------------------------------
 #   Helpers
-# -------------------------
+# ----------------------------------------------------
 
-def is_fresh(ingredient_id, ranges):
+def extract_number_at(lines, r, col):
     """
-    Given a single ingredient_id (int) and a list of ranges [(start, end), ...],
-    return True if the id is inside ANY of the ranges (inclusive).
-    Otherwise, return False.
+    Given a position (r, col), return the full integer centered on that column.
+    If that position is not a digit, return None.
     """
-    for start, end in ranges:
-        if start <= ingredient_id <= end:
-            return True
-    return False
+    row = lines[r]
+    if col >= len(row) or not row[col].isdigit():
+        return None
+
+    # expand left
+    left = col
+    while left > 0 and row[left - 1].isdigit():
+        left -= 1
+
+    # expand right
+    right = col
+    while right + 1 < len(row) and row[right + 1].isdigit():
+        right += 1
+
+    return int(row[left:right + 1])
 
 
-def total_fresh_from_ranges(ranges):
+def find_blocks(lines):
     """
-    Given a list of (start, end) ranges, compute how many distinct IDs
-    are considered fresh, accounting for overlaps.
-
-    Strategy:
-    - If no ranges, answer is 0.
-    - Sort ranges by start.
-    - Merge overlapping/touching ranges into one big segment at a time.
-    - Sum the sizes of the merged segments.
+    Identify problem blocks as contiguous column ranges where at least
+    one row has a non-space character.
+    Returns a list of (start_col, end_col) inclusive.
     """
-    if not ranges:
-        return 0
+    width = max(len(row) for row in lines)
+    blocks = []
 
-    # Sort by start value (default tuple sort is fine).
-    sorted_ranges = sorted(ranges)
+    in_block = False
+    start = None
 
-    total = 0
-    # Initialize current merged segment with the first range.
-    current_start, current_end = sorted_ranges[0]
+    for col in range(width):
+        col_all_space = True
+        for row in lines:
+            if col < len(row) and row[col] != " ":
+                col_all_space = False
+                break
 
-    # Walk through the remaining ranges.
-    for start, end in sorted_ranges[1:]:
-        if start <= current_end:
-            # Overlaps or touches the current segment.
-            # Maybe extend the right side.
-            if end > current_end:
-                current_end = end
+        if col_all_space:
+            if in_block:
+                blocks.append((start, col - 1))
+                in_block = False
+                start = None
         else:
-            # No overlap: close the previous segment.
-            total += current_end - current_start + 1
-            # Start a new segment.
-            current_start, current_end = start, end
+            if not in_block:
+                in_block = True
+                start = col
 
-    # Close the final segment.
-    total += current_end - current_start + 1
+    if in_block:
+        blocks.append((start, width - 1))
+
+    return blocks
+
+
+# ----------------------------------------------------
+#   Part 1 — Top-Down Problems
+# ----------------------------------------------------
+
+def part1(lines):
+    total = 0
+    blocks = find_blocks(lines)
+    bottom = len(lines) - 1
+
+    for (start, end) in blocks:
+        op = None
+        # Find the operator inside this block
+        for c in range(start, end + 1):
+            if c < len(lines[bottom]) and lines[bottom][c] in "+*":
+                op = lines[bottom][c]
+                op_col = c
+                break
+
+        if op is None:
+            continue
+
+        # Collect numbers vertically above the operator
+        nums = []
+        r = bottom - 1
+        while r >= 0:
+            n = extract_number_at(lines, r, op_col)
+            if n is None:
+                break
+            nums.append(n)
+            r -= 1
+
+        # Combine
+        if op == "+":
+            total += sum(nums)
+        else:
+            product = 1
+            for x in nums:
+                product *= x
+            total += product
 
     return total
 
 
-# -------------------------
-#   Part 1 Logic
-# -------------------------
-
-def part1(lines):
-    """
-    Count how many of the available ingredient IDs (after the blank line)
-    are fresh according to the ranges (before the blank line).
-    """
-
-    # 1. Find the blank line that separates ranges from IDs.
-    blank_index = None
-    for i in range(len(lines)):
-        if lines[i].strip() == "":
-            blank_index = i
-            break
-
-    if blank_index is None:
-        raise ValueError("Input missing blank line separator between ranges and IDs.")
-
-    # 2. Build ranges list from lines before the blank.
-    ranges = []
-    for i in range(blank_index):
-        line = lines[i].strip()
-        if not line:
-            continue
-        start_str, end_str = line.split("-")
-        start = int(start_str)
-        end = int(end_str)
-        ranges.append((start, end))
-
-    # 3. Build IDs list from lines after the blank.
-    ids = []
-    for i in range(blank_index + 1, len(lines)):
-        line = lines[i].strip()
-        if not line:
-            continue
-        ids.append(int(line))
-
-    # 4. Count how many IDs are fresh.
-    count = 0
-    for ingredient_id in ids:
-        if is_fresh(ingredient_id, ranges):
-            count += 1
-
-    return count
-
-
-# -------------------------
-#   Part 2 Logic
-# -------------------------
+# ----------------------------------------------------
+#   Part 2 — Right-to-Left Cephalopod Math
+# ----------------------------------------------------
 
 def part2(lines):
-    """
-    Ignore the available IDs section. Instead, treat the ranges themselves
-    as defining all possible fresh IDs, and count how many distinct IDs
-    they cover in total (with overlaps merged).
-    """
+    total = 0
+    blocks = find_blocks(lines)
+    bottom = len(lines) - 1
 
-    # 1. Find the blank line that separates ranges from IDs.
-    blank_index = None
-    for i in range(len(lines)):
-        if lines[i].strip() == "":
-            blank_index = i
-            break
+    for (start, end) in blocks:
+        digits = [[] for _ in range(end - start + 1)]
 
-    if blank_index is None:
-        raise ValueError("Input missing blank line separator between ranges and IDs.")
+        # Read numbers RIGHT→LEFT
+        for r in range(bottom - 1, -1, -1):
+            for c in range(start, end + 1):
+                idx = end - c  # flip horizontally
+                if c < len(lines[r]) and lines[r][c].isdigit():
+                    digits[idx].append(lines[r][c])
 
-    # 2. Build ranges list from lines before the blank.
-    ranges = []
-    for i in range(blank_index):
-        line = lines[i].strip()
-        if not line:
+        # Build integers column-by-column
+        nums = []
+        for dlist in digits:
+            if dlist:
+                num = int("".join(reverse_list := dlist[::-1]))
+                nums.append(num)
+
+        # Find operator
+        op = None
+        for c in range(start, end + 1):
+            if c < len(lines[bottom]) and lines[bottom][c] in "+*":
+                op = lines[bottom][c]
+                break
+
+        if op is None:
             continue
-        start_str, end_str = line.split("-")
-        start = int(start_str)
-        end = int(end_str)
-        ranges.append((start, end))
 
-    # 3. Let the helper merge and count all fresh IDs.
-    return total_fresh_from_ranges(ranges)
+        # Combine
+        if op == "+":
+            total += sum(nums)
+        else:
+            product = 1
+            for x in nums:
+                product *= x
+            total += product
 
-
-# -------------------------
-#   Part 1 Tests
-# -------------------------
-
-def test_is_fresh_basic_inside_range():
-    ranges = [(3, 5)]
-    assert is_fresh(3, ranges)
-    assert is_fresh(4, ranges)
-    assert is_fresh(5, ranges)
+    return total
 
 
-def test_is_fresh_basic_outside_range():
-    ranges = [(3, 5)]
-    assert not is_fresh(2, ranges)
-    assert not is_fresh(6, ranges)
+# ----------------------------------------------------
+#   Tests — Part 1
+# ----------------------------------------------------
 
-
-def test_is_fresh_multiple_ranges():
-    ranges = [(3, 5), (10, 14)]
-    assert is_fresh(4, ranges)
-    assert is_fresh(11, ranges)
-    assert not is_fresh(9, ranges)
-
-
-def test_is_fresh_overlapping_ranges():
-    ranges = [(10, 14), (12, 18)]
-    # 12–14 are in both; 15–18 in second.
-    assert is_fresh(12, ranges)
-    assert is_fresh(17, ranges)
-    assert not is_fresh(9, ranges)
-    assert not is_fresh(19, ranges)
-
-
-def test_part1_example_from_prompt():
+def test_find_blocks_two_problems():
     lines = [
-        "3-5",
-        "10-14",
-        "16-20",
-        "12-18",
-        "",
-        "1",
-        "5",
-        "8",
-        "11",
-        "17",
-        "32",
+        "123   456",
+        " 45   789",
+        "  6   321",
+        "*     +  "
     ]
-    # From the puzzle text: fresh IDs among these are 5, 11, 17 -> 3.
-    assert part1(lines) == 3
+    blocks = find_blocks(lines)
+    assert blocks == [(0, 2), (6, 8)]
 
 
-def test_part1_all_spoiled():
+def test_part1_example():
     lines = [
-        "10-20",
-        "",
-        "1",
-        "2",
-        "3",
+        "123 328  51 64 ",
+        " 45  64 387 23 ",
+        "  6  98 215 314",
+        "*   +   *   +  ",
     ]
-    # All IDs are outside 10–20.
-    assert part1(lines) == 0
+    # Provided example result:
+    # 123*45*6 = 33210
+    # 328+64+98 = 490
+    # 51*387*215 = 4243455
+    # 64+23+314 = 401
+    # sum = 4277556
+    assert part1(lines) == 4277556
 
 
-def test_part1_all_fresh():
+# ----------------------------------------------------
+#   Tests — Part 2
+# ----------------------------------------------------
+
+def test_part2_example():
     lines = [
-        "1-100",
-        "",
-        "1",
-        "2",
-        "50",
-        "100",
+        "123 328  51 64 ",
+        " 45  64 387 23 ",
+        "  6  98 215 314",
+        "*   +   *   +  ",
     ]
-    assert part1(lines) == 4
+    # Provided part 2 example total: 3263827
+    assert part2(lines) == 3263827
 
 
-# -------------------------
-#   Part 2 Helper Tests
-# -------------------------
-
-def test_total_fresh_from_ranges_empty():
-    ranges = []
-    assert total_fresh_from_ranges(ranges) == 0
-
-
-def test_total_fresh_from_ranges_single_range():
-    ranges = [(3, 7)]  # 3,4,5,6,7 → 5 IDs.
-    assert total_fresh_from_ranges(ranges) == 5
-
-
-def test_total_fresh_from_ranges_disjoint_ranges():
-    ranges = [
-        (1, 3),   # 3 IDs: 1,2,3
-        (10, 11), # 2 IDs: 10,11
-    ]
-    # Total = 3 + 2 = 5.
-    assert total_fresh_from_ranges(ranges) == 5
-
-
-def test_total_fresh_from_ranges_overlapping_ranges():
-    ranges = [
-        (3, 5),   # 3,4,5
-        (5, 10),  # 5..10
-    ]
-    # Union covers 3..10 → 8 IDs.
-    assert total_fresh_from_ranges(ranges) == 8
-
-
-def test_total_fresh_from_ranges_nested_ranges():
-    ranges = [
-        (3, 20),
-        (5, 10),
-        (7, 8),
-    ]
-    # Everything is inside 3..20 → 18 IDs.
-    assert total_fresh_from_ranges(ranges) == 18
-
-
-def test_total_fresh_from_ranges_example_from_prompt():
-    ranges = [
-        (3, 5),
-        (10, 14),
-        (16, 20),
-        (12, 18),
-    ]
-    # From the description: total of 14 IDs.
-    assert total_fresh_from_ranges(ranges) == 14
-
-
-# -------------------------
-#   Part 2 Integration Tests
-# -------------------------
-
-def test_part2_small_example_from_prompt():
-    lines = [
-        "3-5",
-        "10-14",
-        "16-20",
-        "12-18",
-        "",
-        "1",
-        "5",
-        "8",
-        "11",
-        "17",
-        "32",
-    ]
-    # From the description: 14 total fresh IDs across the ranges.
-    assert part2(lines) == 14
-
-
-def test_part2_only_one_range():
-    lines = [
-        "100-105",
-        "",
-        "50",
-        "100",
-        "103",
-        "200",
-    ]
-    # Range 100..105 → 6 IDs total.
-    assert part2(lines) == 6
-
-
-# -------------------------
-#   Run the Tests
-# -------------------------
+# ----------------------------------------------------
+#   Run Tests
+# ----------------------------------------------------
 
 def run_tests():
     print("Running tests...")
 
-    # Part 1 tests
-    test_is_fresh_basic_inside_range()
-    test_is_fresh_basic_outside_range()
-    test_is_fresh_multiple_ranges()
-    test_is_fresh_overlapping_ranges()
-    test_part1_example_from_prompt()
-    test_part1_all_spoiled()
-    test_part1_all_fresh()
-
-    # Part 2 helper tests
-    test_total_fresh_from_ranges_empty()
-    test_total_fresh_from_ranges_single_range()
-    test_total_fresh_from_ranges_disjoint_ranges()
-    test_total_fresh_from_ranges_overlapping_ranges()
-    test_total_fresh_from_ranges_nested_ranges()
-    test_total_fresh_from_ranges_example_from_prompt()
-
-    # Part 2 integration tests
-    test_part2_small_example_from_prompt()
-    test_part2_only_one_range()
+    test_find_blocks_two_problems()
+    test_part1_example()
+    test_part2_example()
 
     print("All tests passed!")
 
 
-# -------------------------
-#   Main Code Section
-# -------------------------
+# ----------------------------------------------------
+#   Main
+# ----------------------------------------------------
 
 if __name__ == "__main__":
-    RUN_TESTS = False  # flip to True to run tests instead of solving
+    RUN_TESTS = False
 
     if RUN_TESTS:
         run_tests()
