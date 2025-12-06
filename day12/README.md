@@ -1,119 +1,101 @@
-# 🎄 Advent of Code 2025 — Day 12: Secret Entrance
+# 🎄 Advent of Code 2025 — Day 5: Cafeteria Chaos
 
 ```text
-        *    ✵
-      ✵  \ | /   *
+        *     ✵         *  
+   ✵     \ | /   *    ✵      ~ sniffs aggressively ~
     *     \|/  ✵
-  ✵    * --🎄--   *
+  ✵    * --🎄--   *      "WHO LEFT ALL THESE INGREDIENTS OUT?!"
     *     /|\      ✵
-       ✵ / | \  *
+       ✵ / | \  *  
            *
 ```
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+Welcome to **Day 5**, also known as:
 
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+> “Why did the North Pole migrate to an inventory system  
+> that looks like it was written by a sleep-deprived raccoon?”
+
+The forklifts just punched through a wall, revealing a **cafeteria full of screaming Elves**, and now *you* have to determine which ingredients are spoiled before someone accidentally serves “mystery soup with a hint of tetanus.”
+
+Inside this folder you’ll find:
+
+- A **Python solution** for Part 1 and Part 2  
+- A test suite so future-you doesn’t come back tomorrow yelling  
+  “WHO BROKE MY RANGE MERGING?!”
 
 ---
 
 ## 🎅 Story Summary
 
-### 🧩 Part 1
+### 🧩 Part 1 — *Is This Ingredient Fresh or a Biohazard?*
 
-Follow all rotations from the input.  
-After **each full rotation**, check where the dial ends up.  
+The Elves give you:
 
-> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
+1. A list of **fresh ID ranges**  
+2. A blank line  
+3. A list of **ingredient IDs they found lying around**
 
-### 🧩 Part 2 — Click-by-Click Mode
+Your job:
 
-The Elves switch to “method `0x434C49434B`”, which means:
+> For each ingredient ID, check if it falls inside *any* fresh range.  
+> If yes: **fresh**.  
+> If no: **straight to the trash chute, do not pass Go.**
 
-> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
+### 🧩 Part 2 — *The Raccoon Approves of Unionizing the Ranges*
 
-So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+Now the Elves say:
+
+> “Ignore the ingredient list entirely.  
+> We want to know how many total IDs are fresh **in theory**.”
+
+So you merge all overlapping ranges into mega-range-chimichangas and count how many IDs they cover.
+
+Example ranges merge to:
+- `3–5`
+- `10–20`
+
+Total fresh IDs = **14**
 
 ---
 
 ## 🔧 Project Structure
 
-```plaintext
-day02/
-├── input.txt      # Your personal puzzle input
-├── solution.py    # Python solution (part1, part2, tests)
-└── README.md      # This file
+```
+day05/
+├── input.txt
+├── solution.py
+└── README.md
 ```
 
 ---
 
-## ▶️ How to Run the Solution
+## ▶️ Running the Solution
 
+```
+python3 solution.py
+```
 
 ---
 
-## 🧪 Running the Optional Test Suite
+## 🧪 Running the Test Suite
 
-`solution.py` includes a small, built-in test suite that checks:
+Turn tests on by setting:
 
-- The official example from the problem statement (Part 1 & Part 2)
-- Some custom scenarios that stress wrapping and multiple zero crossings
-
-The tests are **off by default** so normal runs just solve the puzzle.
-
-### 🔄 Turn Tests On
-
-1. Open `solution.py`
-2. Scroll to the bottom and find:
-
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = False
-   ```
-
-3. Switch it to:
-
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = True
-   ```
-
-4. Run:
-
-   ```bash
-   python3 solution.py
-   ```
-
-You’ll see something like:
-
-```text
-Running tests...
-All tests passed!
+```
+RUN_TESTS = True
 ```
 
-If any `assert` fails, Python will raise an error so you can investigate.
+at the bottom of `solution.py`.
 
-### 🔁 Switch Back to Puzzle Mode
+Run:
 
-Once you’re done testing, set:
-
-```python
-RUN_TESTS = False
 ```
-
-again so `solution.py` runs against `input.txt` and prints your actual answers.
-
----
-
-## 🎁 Example Walkthrough (Tiny Sample)
+python3 solution.py
+```
 
 ---
 
 ## 🦝 Built by NickDoesDevOps
 
-Created with ☕, curiosity, and just enough chaos by:
-
-- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
-- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
-
-🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
+Caffeinated, chaotic, and festive.  
+#RaccoonDrivenDevelopment • #LearningInPublic • #BuiltInPublic
