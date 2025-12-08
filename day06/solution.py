@@ -1,150 +1,73 @@
 #!/usr/bin/env python3
 """
-Advent of Code 2025 – Tachyon Manifold (Beams & Splitters)
-
-Part 1: classical beams (they merge when they overlap).
-Part 2: quantum many-worlds beams (every path is its own timeline).
+Advent of Code 2025 — Day 6: Trash Compactor
+Full solution with helpers + small test suite.
 """
 
 # -------------------------
-#   Input
+#   Input Handling
 # -------------------------
 
 
-def read_input():
+def read_input(path: str = "input.txt") -> list[str]:
+    """Read the puzzle input and return a list of raw lines (no trailing newlines)."""
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read().splitlines()
+
+
+def normalize_lines(lines: list[str]) -> list[str]:
     """
-    Read puzzle input from input.txt and return as list of lines.
+    Pad all lines on the right with spaces so they have equal length.
+    This makes column-based scanning safe.
     """
-    with open("input.txt") as f:
-        return f.read().rstrip("\n").splitlines()
+    width = max(len(row) for row in lines)
+    return [row.ljust(width) for row in lines]
 
 
 # -------------------------
-#   Helpers
+#   Block Detection
 # -------------------------
 
 
-def find_start(grid):
+def find_blocks(lines: list[str]) -> list[tuple[int, int]]:
     """
-    Find the coordinates of 'S' in the grid.
+    Return a list of (start_col, end_col) for each problem block.
 
-    grid: list[str]
-    returns: (row, col)
+    A "block" is a maximal contiguous run of columns where at least one
+    row has a non-space character. Columns where *all* rows are space
+    act as separators between problems.
     """
-    for r, row in enumerate(grid):
-        c = row.find("S")
-        if c != -1:
-            return r, c
-    raise ValueError("No starting 'S' found in grid")
+    grid = normalize_lines(lines)
+    width = len(grid[0])
+    blocks: list[tuple[int, int]] = []
 
+    in_block = False
+    start_col = None
 
-def step_classical(grid, beams):
-    """
-    Single simulation step for Part 1 (classical tachyon beams).
+    for c in range(width):
+        col_all_space = True
+        for row in grid:
+            if row[c] != " ":
+                col_all_space = False
+                break
 
-    - Beams always move one cell DOWN.
-    - If a beam enters a splitter '^':
-        * That beam stops.
-        * Two new beams are created: one to the LEFT, one to the RIGHT
-          on the same row as the splitter.
-    - If multiple beams overlap in the same cell, they are considered
-      a single beam in the next step (we deduplicate positions).
-      This matches the example where multiple splitters "dump into"
-      the same spot and the diagram only shows a single beam there.
-
-    grid: list[str]
-    beams: list[(row, col)] – active beam positions for this step
-
-    returns:
-        next_beams: list[(row, col)]
-        splits_this_step: int
-    """
-    h = len(grid)
-    w = len(grid[0])
-
-    # Classical mode: overlapping beams merge into one.
-    beams = list(set(beams))
-
-    next_beams = []
-    splits_this_step = 0
-
-    for (r, c) in beams:
-        nr = r + 1  # one row down
-        if nr < 0 or nr >= h or c < 0 or c >= w:
-            # Falls out of the manifold; beam dies
-            continue
-
-        cell = grid[nr][c]
-
-        if cell in ".S":
-            # Just empty space (or the S row if we ever pass it):
-            # beam continues straight down.
-            next_beams.append((nr, c))
-
-        elif cell == "^":
-            # Beam stops, splits left and right (if in bounds).
-            splits_this_step += 1
-
-            if c - 1 >= 0:
-                next_beams.append((nr, c - 1))
-            if c + 1 < w:
-                next_beams.append((nr, c + 1))
-
+        if col_all_space:
+            # We hit an empty separator column
+            if in_block:
+                blocks.append((start_col, c - 1))
+                in_block = False
+                start_col = None
         else:
-            # Unknown character: treat as empty space just in case.
-            next_beams.append((nr, c))
+            # Non-empty column
+            if not in_block:
+                in_block = True
+                start_col = c
 
-    return next_beams, splits_this_step
+    # Close trailing block if needed
+    if in_block and start_col is not None:
+        blocks.append((start_col, width - 1))
 
-
-def step_quantum(grid, beams):
-    """
-    Single simulation step for Part 2 (quantum many-worlds beams).
-
-    Key difference from classical:
-    - We DO NOT merge overlapping beams. Every beam is its own timeline.
-    - Every beam that falls out the bottom creates a new finished timeline.
-
-    grid: list[str]
-    beams: list[(row, col)] – active beams
-
-    returns:
-        next_beams: list[(row, col)]
-        exited_this_step: int – how many beams left the manifold this step
-    """
-    h = len(grid)
-    w = len(grid[0])
-
-    next_beams = []
-    exited_this_step = 0
-
-    for (r, c) in beams:
-        nr = r + 1
-        if nr < 0 or nr >= h or c < 0 or c >= w:
-            # This beam has left the grid → it’s a completed timeline.
-            exited_this_step += 1
-            continue
-
-        cell = grid[nr][c]
-
-        if cell in ".S":
-            # Keep going straight down.
-            next_beams.append((nr, c))
-
-        elif cell == "^":
-            # Beam stops, but in this timeline it splits into
-            # *two* separate timelines: left and right beams.
-            # No merging here.
-            if c - 1 >= 0:
-                next_beams.append((nr, c - 1))
-            if c + 1 < w:
-                next_beams.append((nr, c + 1))
-
-        else:
-            # Unknown: treat as empty.
-            next_beams.append((nr, c))
-
-    return next_beams, exited_this_step
+    return blocks
 
 
 # -------------------------
@@ -152,25 +75,65 @@ def step_quantum(grid, beams):
 # -------------------------
 
 
-def part1(lines):
+def eval_block_part1(grid: list[str], start_col: int, end_col: int) -> int:
     """
-    Run classical beam simulation until all beams leave the grid.
-    Return the total number of times a beam is split.
+    Evaluate a single problem block for Part 1.
 
-    This matches the example where the answer is 21 splits.
+    For this interpretation:
+      • Each *row* (except the bottom) contributes at most one number.
+      • Inside the block [start_col:end_col], we strip spaces to get digits.
+      • The bottom row in the block contains the operator (+ or *).
     """
-    grid = lines
-    start_r, start_c = find_start(grid)
+    rows = len(grid)
+    bottom = rows - 1
 
-    beams = [(start_r, start_c)]
-    total_splits = 0
+    # Find operator inside this block on the bottom row
+    op = None
+    for c in range(start_col, end_col + 1):
+        ch = grid[bottom][c]
+        if ch in "+*":
+            op = ch
+            break
+    if op is None:
+        # No operator -> ignore this block
+        return 0
 
-    # Keep ticking downward until no beams left.
-    while beams:
-        beams, splits = step_classical(grid, beams)
-        total_splits += splits
+    # Collect numbers from rows above
+    nums: list[int] = []
+    for r in range(0, bottom):
+        segment = grid[r][start_col : end_col + 1]
+        s = segment.strip()
+        if s:
+            nums.append(int(s))
 
-    return total_splits
+    if not nums:
+        return 0
+
+    if op == "+":
+        return sum(nums)
+    else:
+        prod = 1
+        for x in nums:
+            prod *= x
+        return prod
+
+
+def part1(lines: list[str]) -> int:
+    """
+    Part 1:
+    - Detect vertical problem blocks.
+    - For each block, treat each row as one number (except bottom row).
+    - Bottom row carries operator (+ or *).
+    - Compute block value and sum them all.
+    """
+    grid = normalize_lines(lines)
+    blocks = find_blocks(grid)
+
+    total = 0
+    for start_col, end_col in blocks:
+        total += eval_block_part1(grid, start_col, end_col)
+
+    return total
 
 
 # -------------------------
@@ -178,180 +141,127 @@ def part1(lines):
 # -------------------------
 
 
-def part2(lines):
+def eval_block_part2(grid: list[str], start_col: int, end_col: int) -> int:
     """
-    Quantum many-worlds version.
+    Evaluate a single problem block for Part 2.
 
-    A single tachyon particle splits at each splitter, creating
-    branching timelines. We simulate all beams independently
-    without merging them, and count how many beams eventually
-    fall out the bottom of the grid.
-
-    That count = number of distinct timelines.
+    New interpretation:
+      • Cephalopod math is written right-to-left in columns.
+      • Each number is in a *single column*, with the top digit as the
+        most significant and the bottom digit as the least significant.
+      • We still use the bottom row's operator for the whole block.
+      • Problems are read right-to-left: we scan columns from end_col
+        down to start_col and build one number per column.
     """
-    grid = lines
-    start_r, start_c = find_start(grid)
+    rows = len(grid)
+    bottom = rows - 1
 
-    beams = [(start_r, start_c)]
-    total_timelines = 0
+    # Find operator inside this block on the bottom row
+    op = None
+    for c in range(start_col, end_col + 1):
+        ch = grid[bottom][c]
+        if ch in "+*":
+            op = ch
+            break
+    if op is None:
+        return 0
 
-    # As long as there is at least one active beam in some timeline,
-    # keep simulating.
-    while beams:
-        beams, exited = step_quantum(grid, beams)
-        total_timelines += exited
+    nums: list[int] = []
+    # Scan columns right-to-left, as specified
+    for c in range(end_col, start_col - 1, -1):
+        digits: list[str] = []
+        # Collect digits from top to row before bottom
+        for r in range(0, bottom):
+            ch = grid[r][c]
+            if ch.isdigit():
+                digits.append(ch)
+        if digits:
+            nums.append(int("".join(digits)))
 
-    return total_timelines
+    if not nums:
+        return 0
 
-
-# -------------------------
-#   Test Suite (Part 1)
-# -------------------------
-
-
-def test_part1_no_splitters():
-    grid = [
-        "..S..",
-        ".....",
-        ".....",
-    ]
-    # Beam just goes straight down and then leaves; no splits.
-    assert part1(grid) == 0
-
-
-def test_part1_single_splitter():
-    grid = [
-        "..S..",
-        "..^..",
-        ".....",
-    ]
-    # S (0,2) → (1,2) '^' → one split event.
-    assert part1(grid) == 1
+    if op == "+":
+        return sum(nums)
+    else:
+        prod = 1
+        for x in nums:
+            prod *= x
+        return prod
 
 
-def test_part1_edge_splitter():
-    grid = [
-        "S....",
-        "^....",
-        ".....",
-    ]
-    # Beam drops onto '^' at (1,0).
-    # Only right child is in bounds.
-    assert part1(grid) == 1
+def part2(lines: list[str]) -> int:
+    """
+    Part 2:
+    - Same block detection.
+    - For each block:
+        • Build one number per column (top→bottom digits) within that block.
+        • Scan columns right-to-left.
+        • Use the operator at the bottom row of the block.
+    - Sum all block results.
+    """
+    grid = normalize_lines(lines)
+    blocks = find_blocks(grid)
 
+    total = 0
+    for start_col, end_col in blocks:
+        total += eval_block_part2(grid, start_col, end_col)
 
-def test_part1_example_prompt():
-    # Example from the problem description:
-    grid = [
-        ".......S.......",
-        "...............",
-        ".......^.......",
-        "...............",
-        "......^.^......",
-        "...............",
-        ".....^.^.^.....",
-        "...............",
-        "....^.^...^....",
-        "...............",
-        "...^.^...^.^...",
-        "...............",
-        "..^...^.....^..",
-        "...............",
-        ".^.^.^.^.^...^.",
-        "...............",
-    ]
-    # The statement says: a tachyon beam is split 21 times.
-    assert part1(grid) == 21
+    return total
 
 
 # -------------------------
-#   Test Suite (Part 2)
+#   Example Fixture (from prompt)
 # -------------------------
 
-
-def test_part2_no_splitters():
-    grid = [
-        "..S..",
-        ".....",
-        ".....",
-    ]
-    # Single beam falls out bottom once → 1 timeline.
-    assert part2(grid) == 1
-
-
-def test_part2_single_splitter_two_paths():
-    grid = [
-        "..S..",
-        "..^..",
-        ".....",
-        ".....",
-    ]
-    # Beam hits '^' once → left + right beams.
-    # Both eventually fall off bottom, so 2 timelines.
-    assert part2(grid) == 2
-
-
-def test_part2_example_prompt():
-    # Same big example, now quantum:
-    grid = [
-        ".......S.......",
-        "...............",
-        ".......^.......",
-        "...............",
-        "......^.^......",
-        "...............",
-        ".....^.^.^.....",
-        "...............",
-        "....^.^...^....",
-        "...............",
-        "...^.^...^.^...",
-        "...............",
-        "..^...^.....^..",
-        "...............",
-        ".^.^.^.^.^...^.",
-        "...............",
-    ]
-    # The prompt says there are 40 distinct timelines.
-    assert part2(grid) == 40
-
-
-def test_part2_multiple_layers_small():
-    # Simple stacked splitters to sanity-check growth.
-    grid = [
-        "..S..",
-        "..^..",
-        "..^..",
-        ".....",
-        ".....",
-    ]
-    # Step summary:
-    #   Start: 1 beam
-    #   Hit first '^' → 2 beams
-    #   Each hits next '^' → each splits into 2 → 4 beams
-    #   All 4 eventually fall out → 4 timelines
-    assert part2(grid) == 4
+EXAMPLE_LINES = [
+    "123 328  51 64 ",
+    " 45  64 387 23 ",
+    "  6  98 215 314",
+    "*   +   *   +  ",
+]
 
 
 # -------------------------
-#   Run Tests
+#   Tests
 # -------------------------
 
 
-def run_tests():
+def test_find_blocks_example():
+    blocks = find_blocks(EXAMPLE_LINES)
+    # Four problems: columns [0-2], [4-6], [8-10], [12-14]
+    assert blocks == [(0, 2), (4, 6), (8, 10), (12, 14)]
+
+
+def test_part1_example_from_prompt():
+    # Given in the description:
+    # 123 * 45 * 6       = 33210
+    # 328 + 64 + 98      = 490
+    # 51 * 387 * 215     = 4243455
+    # 64 + 23 + 314      = 401
+    # Grand total        = 4277556
+    assert part1(EXAMPLE_LINES) == 4277556
+
+
+def test_part2_example_from_prompt():
+    # According to the prompt (with the right alignment), Part 2 example
+    # evaluates to 3263827. If your copied spacing differs from the original
+    # problem text, this expected value might need adjusting, but the logic
+    # stays the same.
+    #
+    # If this assert fails for your local EXAMPLE_LINES, double-check
+    # the spaces in the example input.
+    #
+    # NOTE: adjust this expected value if you know your exact sample
+    # differs. For now we use the number from the problem text.
+    assert part2(EXAMPLE_LINES) == 3263827
+
+
+def run_tests() -> None:
     print("Running tests...")
-
-    # Part 1 tests
-    test_part1_no_splitters()
-    test_part1_single_splitter()
-    test_part1_edge_splitter()
-    test_part1_example_prompt()
-
-    # Part 2 tests
-    test_part2_no_splitters()
-    test_part2_single_splitter_two_paths()
-    test_part2_example_prompt()
-    test_part2_multiple_layers_small()
-
+    test_find_blocks_example()
+    test_part1_example_from_prompt()
+    test_part2_example_from_prompt()
     print("All tests passed!")
 
 
@@ -360,11 +270,11 @@ def run_tests():
 # -------------------------
 
 if __name__ == "__main__":
-    RUN_TESTS = False  # set to True to run tests instead of solving
+    RUN_TESTS = False  # Flip to True to run tests
 
     if RUN_TESTS:
         run_tests()
     else:
-        lines = read_input()
+        lines = read_input("input.txt")
         print("Part 1:", part1(lines))
         print("Part 2:", part2(lines))
