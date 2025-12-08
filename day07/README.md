@@ -1,119 +1,163 @@
-# 🎄 Advent of Code 2025 — Day 7: Secret Entrance
+# 🎄 Advent of Code 2025 — Day 6: Tachyon Manifold Mayhem (FULL RACCOON MODE)
 
-```text
-        *    ✵
-      ✵  \ | /   *
-    *     \|/  ✵
-  ✵    * --🎄--   *
-    *     /|\      ✵
-       ✵ / | \  *
-           *
-```
+<p align="left">
+  <img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="A raccoon confidently repairing a teleporter he absolutely should NOT touch"
+    title="Quantum OSHA Incident #88"
+  >
+</p>
 
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
+Welcome to **Day 6**, where teleporters are broken, tachyons are upset,  
+and **you** are somehow the raccoon chosen to “fix” quantum physics.
 
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+Today’s scientific objectives include:
+
+- poking dangerous machinery  
+- counting reality splits  
+- questioning the fabric of spacetime  
+- and yelling “WHY IS THIS LEAKING MAGIC SMOKE?!” every 4 seconds
+
+Let’s jump in.
 
 ---
 
-## 🎅 Story Summary
+## 🧩 Part 1 — “Classical Tachyons and the Great Beam Spaghetti Incident”
 
-### 🧩 Part 1
+A beam moves **straight down** through the manifold.  
+It passes through dots (`.`) just fine.
 
-Follow all rotations from the input.  
-After **each full rotation**, check where the dial ends up.  
+But when it hits a splitter (`^`)?
 
-> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
+👉 **The beam stops.**  
+👉 **Two new beams spawn**: one going down-left, one down-right.  
+👉 Your job is to count **how many total splits happen** before all beams disappear.
 
-### 🧩 Part 2 — Click-by-Click Mode
+It’s basically:
 
-The Elves switch to “method `0x434C49434B`”, which means:
+- Plinko  
+- but with lasers  
+- and absolutely no regard for causality
 
-> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
+Every splitter is a raccoon-operated “beam duplicator”  
+and yes, they copied the design from a broken vending machine.
 
-So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+---
+
+## 🧩 Part 2 — “Quantum Tachyons and the Multiverse Raccoon Explosion”
+
+NOW we are told:
+
+> “Oh yeah… it’s actually a *quantum* tachyon manifold.”
+
+Which means:
+
+- One particle enters  
+- At every splitter, **time itself splits**  
+- Each new timeline follows a different path  
+- You must count **how many timelines exist at the end**
+
+This is:
+
+- the Many-Worlds Interpretation  
+- but specifically the *raccoon edition*  
+- where reality forks so often it develops PTSD
+
+Your answer is the **total number of distinct leaf timelines**,  
+not the number of beams in one simulation.
 
 ---
 
 ## 🔧 Project Structure
 
-```plaintext
-day02/
-├── input.txt      # Your personal puzzle input
-├── solution.py    # Python solution (part1, part2, tests)
-└── README.md      # This file
+```
+day06/
+├── input.txt
+├── solution.py
+└── README.md
 ```
 
 ---
 
-## ▶️ How to Run the Solution
+## ▶️ Running the Solution
 
+```
+python3 solution.py
+```
+
+Output looks like:
+
+```
+Part 1: <split_count>
+Part 2: <timeline_count>
+```
+
+If Part 2 prints a number larger than the heat death of the universe,  
+your raccoon probably forgot a memoization step.
 
 ---
 
-## 🧪 Running the Optional Test Suite
+## 🧪 Test Suite
 
-`solution.py` includes a small, built-in test suite that checks:
+We use tests because this puzzle is:
 
-- The official example from the problem statement (Part 1 & Part 2)
-- Some custom scenarios that stress wrapping and multiple zero crossings
+- recursive  
+- branching  
+- dimensionality‑exploding  
+- and capable of accidentally simulating 10⁷⁰ universes
 
-The tests are **off by default** so normal runs just solve the puzzle.
+To run tests:
 
-### 🔄 Turn Tests On
+1. Set:
 
-1. Open `solution.py`
-2. Scroll to the bottom and find:
+```
+RUN_TESTS = True
+```
 
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = False
-   ```
+2. Run:
 
-3. Switch it to:
+```
+python3 solution.py
+```
 
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = True
-   ```
+You want:
 
-4. Run:
-
-   ```bash
-   python3 solution.py
-   ```
-
-You’ll see something like:
-
-```text
+```
 Running tests...
 All tests passed!
 ```
 
-If any `assert` fails, Python will raise an error so you can investigate.
+If you DON’T get that:
 
-### 🔁 Switch Back to Puzzle Mode
-
-Once you’re done testing, set:
-
-```python
-RUN_TESTS = False
-```
-
-again so `solution.py` runs against `input.txt` and prints your actual answers.
+> a raccoon in another timeline is laughing at you
 
 ---
 
-## 🎁 Example Walkthrough (Tiny Sample)
+## 🎁 Tiny Example (Multiverse Edition)
+
+A beam goes down.  
+It hits a splitter.
+
+Suddenly there are:
+
+- two beams  
+- two futures  
+- two raccoons  
+- twice as many OSHA violations
+
+Repeat this across the whole grid  
+and the number of timelines grows faster than raccoons at a dumpster buffet.
 
 ---
 
 ## 🦝 Built by NickDoesDevOps
 
-Created with ☕, curiosity, and just enough chaos by:
+Powered by:
 
-- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
-- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
+- quantum anomalies  
+- industrial-strength caffeine  
+- duct tape  
+- raccoon intuition  
 
-🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**
+**#NickDoesDevOps • #LearningInPublic • #BuiltInPublic**
