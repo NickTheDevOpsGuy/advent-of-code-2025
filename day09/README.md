@@ -1,14 +1,13 @@
 # 🎄 Advent of Code 2025 — Day 9: Secret Entrance
 
-```text
-        *    ✵
-      ✵  \ | /   *
-    *     \|/  ✵
-  ✵    * --🎄--   *
-    *     /|\      ✵
-       ✵ / | \  *
-           *
-```
+<p align="left">
+  <img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="A raccoon confidently repairing a teleporter he absolutely should NOT touch"
+    title="Quantum OSHA Incident #88"
+  >
+</p>
 
 Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
 
