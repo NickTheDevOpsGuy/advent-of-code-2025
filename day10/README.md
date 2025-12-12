@@ -1,118 +1,71 @@
-# 🎄 Advent of Code 2025 — Day 9: Secret Entrance
+# Advent of Code 2025 – Day 10  
+### *Lights, Buttons, and Raccoons – A Tale of Bitmasks and Finger Soreness*
 
-<p align="left">
-  <img 
-    src="../assets/adventOfCode2025.png"
-    width="800"
-    alt="A raccoon confidently repairing a teleporter he absolutely should NOT touch"
-    title="Quantum OSHA Incident #88"
-  >
-</p>
-
-Decorating the North Pole shouldn’t be this hard… but the Elves have discovered project management, realized they have no time left, and now you have to open a mysterious safe to save Christmas.
-
-This folder contains a clean **Python solution for both Part 1 and Part 2**, plus a tiny built-in test suite so you (or future you) can quickly verify the logic.
+Welcome to the raccoon‑powered explanation of **Day 10**, where lights blink, buttons flip, and your fingers get sore faster than a raccoon digging through a locked trash bin.
 
 ---
 
-## 🎅 Story Summary
+## 🧩 Part 1 Summary  
 
-### 🧩 Part 1
+Each machine line contains:  
+- A **pattern** like `[.##.]` representing target light states.  
+- A set of **button wirings** like `(1,3)` meaning each press toggles those light bits.  
+- A final `{jolts}` section we *ignore* in Part 1.
 
-Follow all rotations from the input.  
-After **each full rotation**, check where the dial ends up.  
+Lights are toggled using XOR logic:  
+- Pressing a button applies a bitmask.  
+- Pressing twice cancels out.  
+- We brute-force all subsets of buttons and find the one matching the target pattern with **minimum presses**.
 
-> The Part 1 password is the number of times the dial is exactly on **0** at the *end* of a rotation.
-
-### 🧩 Part 2 — Click-by-Click Mode
-
-The Elves switch to “method `0x434C49434B`”, which means:
-
-> Count **every single click** that lands on `0`, even if it happens *during* a rotation (not just at the end).
-
-So for each instruction, instead of doing one big jump, you simulate the dial **one click at a time**, wrapping around the `0`–`99` circle, and count every time the dial hits `0`.
+Raccoon translation:  
+> “Try every combination of switches until the lights look right. Try not to electrocute yourself.”
 
 ---
 
-## 🔧 Project Structure
+## 🧩 Part 2 Summary  
 
-```plaintext
-day02/
-├── input.txt      # Your personal puzzle input
-├── solution.py    # Python solution (part1, part2, tests)
-└── README.md      # This file
+Now the machines switch to **joltage mode**.
+
+- Lights don’t matter anymore.  
+- Each button increases specific counters.  
+- Counters must match the `{3,5,4,7}` targets.  
+- Buttons can be pressed **as many times as needed**.  
+- This becomes a tiny integer-linear-system solver.
+
+Raccoon translation:  
+> “Mash buttons until the numbers match. Hope the reactor doesn’t explode.”
+
+We solve it with BFS or greedy stepping until all counters reach the target vector.
+
+---
+
+## 🦝 Algorithmic Insights  
+
+- Bitmask operations for Part 1  
+- Vector increment search for Part 2  
+- Efficient enumeration prevents reactor overheating  
+- Commenting code prevents raccoon confusion  
+
+---
+
+## 🏁 Final Answer Logic  
+
+Part 1 and Part 2 are summed separately.  
+Your solver prints something like:
+
+```
+Part 1: <value>
+Part 2: <value>
 ```
 
 ---
 
-## ▶️ How to Run the Solution
+## 🎉 Closing Thoughts  
 
+This puzzle teaches:  
+- Practical XOR patterns  
+- How to turn wiring diagrams into code  
+- Why raccoons should NEVER operate nuclear equipment  
 
----
+Enjoy Day 10. On to Day 11, where everything becomes a graph and the raccoons bring string to represent edges.
 
-## 🧪 Running the Optional Test Suite
-
-`solution.py` includes a small, built-in test suite that checks:
-
-- The official example from the problem statement (Part 1 & Part 2)
-- Some custom scenarios that stress wrapping and multiple zero crossings
-
-The tests are **off by default** so normal runs just solve the puzzle.
-
-### 🔄 Turn Tests On
-
-1. Open `solution.py`
-2. Scroll to the bottom and find:
-
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = False
-   ```
-
-3. Switch it to:
-
-   ```python
-   if __name__ == "__main__":
-       RUN_TESTS = True
-   ```
-
-4. Run:
-
-   ```bash
-   python3 solution.py
-   ```
-
-You’ll see something like:
-
-```text
-Running tests...
-All tests passed!
-```
-
-If any `assert` fails, Python will raise an error so you can investigate.
-
-### 🔁 Switch Back to Puzzle Mode
-
-Once you’re done testing, set:
-
-```python
-RUN_TESTS = False
-```
-
-again so `solution.py` runs against `input.txt` and prints your actual answers.
-
----
-
-## 🎁 Example Walkthrough (Tiny Sample)
-
----
-
-## 🦝 Built by NickDoesDevOps
-
-Created with ☕, curiosity, and just enough chaos by:
-
-- [![GitHub](https://img.shields.io/badge/GitHub-@NickTheDevOpsGuy-181717?logo=github)](https://github.com/NickTheDevOpsGuy)
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nicholas%20Clark-0A66C2?logo=linkedin)](https://www.linkedin.com/in/nicholas-a-clark/)
-- [![Email](https://img.shields.io/badge/Email-Contact-grey?logo=gmail)](mailto:nicholas.a.clark@outlook.com)
-
-🏷 **#NickDoesDevOps** • **#LearningInPublic** • **#BuiltInPublic**

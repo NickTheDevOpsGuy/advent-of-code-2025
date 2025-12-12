@@ -1,101 +1,89 @@
-# 🎄 Advent of Code 2025 — Day 5: Cafeteria Chaos
+# 🎄 Advent of Code 2025 – Day 11  
 
-```text
-        *     ✵         *  
-   ✵     \ | /   *    ✵      ~ sniffs aggressively ~
-    *     \|/  ✵
-  ✵    * --🎄--   *      "WHO LEFT ALL THESE INGREDIENTS OUT?!"
-    *     /|\      ✵
-       ✵ / | \  *  
-           *
-```
+<p align="left">
+  <img 
+    src="../assets/adventOfCode2025.png"
+    width="800"
+    alt="A raccoon confidently repairing a teleporter he absolutely should NOT touch"
+    title="Quantum OSHA Incident #88"
+  >
+</p>
 
-Welcome to **Day 5**, also known as:
+### *Graph Paths, Server Racks, and Raccoons with Ethernet Cables*
 
-> “Why did the North Pole migrate to an inventory system  
-> that looks like it was written by a sleep-deprived raccoon?”
-
-The forklifts just punched through a wall, revealing a **cafeteria full of screaming Elves**, and now *you* have to determine which ingredients are spoiled before someone accidentally serves “mystery soup with a hint of tetanus.”
-
-Inside this folder you’ll find:
-
-- A **Python solution** for Part 1 and Part 2  
-- A test suite so future-you doesn’t come back tomorrow yelling  
-  “WHO BROKE MY RANGE MERGING?!”
+Welcome to **Day 11**, where a million devices form a giant digital spaghetti mess and you must trace every possible path **from one node to another**.
 
 ---
 
-## 🎅 Story Summary
+## 🧩 Part 1 – Count Every Path  
 
-### 🧩 Part 1 — *Is This Ingredient Fresh or a Biohazard?*
+You are looking for all possible directed paths from:
 
-The Elves give you:
+```
+you → out
+```
 
-1. A list of **fresh ID ranges**  
-2. A blank line  
-3. A list of **ingredient IDs they found lying around**
+Each line in the input describes connections:
 
-Your job:
+```
+aaa: you hhh
+you: bbb ccc
+```
 
-> For each ingredient ID, check if it falls inside *any* fresh range.  
-> If yes: **fresh**.  
-> If no: **straight to the trash chute, do not pass Go.**
+This forms a **directed acyclic graph**.
 
-### 🧩 Part 2 — *The Raccoon Approves of Unionizing the Ranges*
+Your job:  
+Count *every possible* path from `"you"` to `"out"`.
 
-Now the Elves say:
+DFS + memoization does the trick.
 
-> “Ignore the ingredient list entirely.  
-> We want to know how many total IDs are fresh **in theory**.”
-
-So you merge all overlapping ranges into mega-range-chimichangas and count how many IDs they cover.
-
-Example ranges merge to:
-- `3–5`
-- `10–20`
-
-Total fresh IDs = **14**
+Raccoon translation:  
+> “Start at YOU. Run along every wire. If you fall off the table, that's a valid path only if it ends in OUT.”
 
 ---
 
-## 🔧 Project Structure
+## 🧩 Part 2 – Paths that Pass Through dac AND fft  
+
+Now they want **all paths from `svr` to `out`**,  
+but only those paths that visit BOTH:
 
 ```
-day05/
-├── input.txt
-├── solution.py
-└── README.md
+dac
+fft
 ```
+
+Order doesn’t matter.  
+Just visit both at some point in the path.
+
+You track two flags:  
+- `seen_dac`  
+- `seen_fft`
+
+Only count the path when **both are true at OUT**.
+
+Raccoon translation:  
+> “Find every cable route from the server to the reactor that passes by the noisy blue box AND the humming red box. Very important. Very dangerous. Very fun.”
 
 ---
 
-## ▶️ Running the Solution
+## 🦝 Algorithmic Insights  
 
-```
-python3 solution.py
-```
-
----
-
-## 🧪 Running the Test Suite
-
-Turn tests on by setting:
-
-```
-RUN_TESTS = True
-```
-
-at the bottom of `solution.py`.
-
-Run:
-
-```
-python3 solution.py
-```
+- DFS is your best friend  
+- Memoization helps for Part 1  
+- Cycle protection is needed for Part 2  
+- Raccoons love recursion (and cables)
 
 ---
 
-## 🦝 Built by NickDoesDevOps
+## 🎉 Final Notes  
 
-Caffeinated, chaotic, and festive.  
-#RaccoonDrivenDevelopment • #LearningInPublic • #BuiltInPublic
+This puzzle reinforces:  
+- Graph traversal  
+- Flag tracking  
+- Avoiding infinite loops  
+- Maintaining raccoon focus in large wirespaces  
+
+---
+
+Enjoy Day 11. And hide your Ethernet cables. The raccoons are learning too much.
+
