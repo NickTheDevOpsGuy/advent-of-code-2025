@@ -153,8 +153,6 @@ def part1(lines: list[str]) -> int:
 #   Part 2: Joltage counters as linear system over integers
 # ============================================================
 
-def count_paths_with_flags:
-
 
 def parse_machine_line_part2(line: str) -> tuple[list[int], list[list[int]]]:
     """
@@ -436,7 +434,7 @@ def min_presses_joltage_machine(jolts: list[int], buttons: list[list[int]]) -> i
     return best
 
 
-def part1(lines: list[str]) -> int:
+def part2(lines: list[str]) -> int:
     """
     For each machine line:
       - parse joltage targets and button wiring
